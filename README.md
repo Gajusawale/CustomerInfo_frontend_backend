@@ -1,5 +1,4 @@
-![image](https://github.com/Gajusawale/CustomerInfo_frontend_backend/assets/95343807/8af42f36-4e41-4de2-bcb9-3cadb4414506)
-
+![image](https://github.com/Gajusawale/CustomerInfo_frontend_backend/assets/95343807/675a8c5d-2df8-4a27-bf92-5147d4886572)
 
 BackEnd :- 
 In backend used the Spring boot,MysqlDB.
