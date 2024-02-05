@@ -50,7 +50,9 @@ public class CustomerService {
         customerGetById.setEmail(customerDTO.getEmail());
         customerGetById.setPhone(customerDTO.getPhone());
 
-        return CustomerMapper.INSTANCE.mapCustomerToCustomerDTO(customerGetById);
+        Customer savedCustomer= customerRepo.save(customerGetById);
+
+        return CustomerMapper.INSTANCE.mapCustomerToCustomerDTO(savedCustomer);
     }
 
     public void deleteCustomerByName(String firstName) {

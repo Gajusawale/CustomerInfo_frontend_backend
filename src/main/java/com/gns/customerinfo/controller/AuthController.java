@@ -22,23 +22,19 @@ public class AuthController {
         this.authService = authService;
     }
 
-    @GetMapping("/get")
-    @CrossOrigin
-    public String getString()
-    {
-        return "getting string";
-    }
+
 
 
     // Build Login REST API
     @CrossOrigin
     @PostMapping(value = {"/login", "/signin"})
     public ResponseEntity<JWTAuthResponse> login(@RequestBody LoginDto loginDto){
+//    public ResponseEntity<String> login(@RequestBody LoginDto loginDto){
         String token = authService.login(loginDto);
         JWTAuthResponse jwtAuthResponse = new JWTAuthResponse();
         jwtAuthResponse.setAccessToken(token);
 
-        return ResponseEntity.ok(jwtAuthResponse);
+        return  ResponseEntity.ok(jwtAuthResponse);
     }
 
     // Build Register REST

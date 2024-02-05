@@ -22,6 +22,12 @@ public class CustomerController {
 
 
 
+    @GetMapping("/get")
+    public String getString()
+    {
+        return "getting string";
+    }
+
 
     // build rest api for Add Customer
     @PostMapping("/addCustomer")
@@ -61,6 +67,7 @@ public class CustomerController {
     {
         CustomerDTO editCustomerDTO= customerService.updateCustomer(id,customerDTO);
 
+        System.out.println("hii update");
         return new ResponseEntity<>(editCustomerDTO,HttpStatus.OK);
     }
 
@@ -82,10 +89,5 @@ public class CustomerController {
 
         return new ResponseEntity<>("customer deleted successfully",HttpStatus.OK);
     }
-
-
-
-
-
 
 }
