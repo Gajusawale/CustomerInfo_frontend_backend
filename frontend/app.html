@@ -6,6 +6,7 @@
   <title>CRUD Application</title>
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
   <!-- Custom CSS -->
   <style>
     body {
@@ -23,7 +24,7 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ms-auto">
 
-        <form class="d-flex" role="search" onsubmit="searchCustomer(); return false;">
+        <form class="d-flex" role="search"  onsubmit="searchCustomer(event); return false;">
           <input id="searchInput" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
           <button class="btn btn-outline-success" type="submit">Search</button>
       </form>
@@ -37,8 +38,37 @@
 </nav>
 
 
+
 <div id="customerDetails">
   
+</div>
+
+<div class="container">
+  <div id="tableContainer" style="display: none;">
+      <table class="table">
+          <thead>
+              <tr>
+                  <th>id</th>
+                  <th>firstName</th>
+                  <th>lastName</th>
+                  <th>street</th>
+                  <th>address</th>
+                  <th>city</th>
+                  <th>state</th>
+                  <th>email</th>
+                  <th>phone</th>
+                  <th>Action</th>
+              </tr>
+          </thead>
+          <tbody id="dataContainer">
+              <!-- Table rows will be added dynamically here -->
+          </tbody>
+      </table>
+      
+      <button class="btn btn-secondary" onclick="closePage()">Close</button>
+      
+  </div>
+ 
 </div>
 
 <div class="container">
@@ -66,7 +96,6 @@
     </tbody>
 </table>
 </div>
-
 
 
 <!-- Edit Modal -->
@@ -215,10 +244,10 @@
 <!-- Bootstrap CSS -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
+
 <!-- Custom JavaScript -->
 <script>
 
-  
 
 
 function postData() {
@@ -511,27 +540,69 @@ async function getCustomerDataById(customerId) {
 }
 
 
-async function searchCustomer() {
+async function searchCustomer(event) {
+  event.preventDefault();
         const searchInput = document.getElementById("searchInput");
         const customerId = searchInput.value.trim();
 
         if (customerId !== "") {
-            const customer = await getCustomerDataById(customerId);
+          try {
+            const data = await getCustomerDataById(customerId);
+            if(data){
 
-            console.log(customer);
-            displayCustomerDetails(customer);
+              console.log(data);  
+            console.log("232")
+            displayData(data);  
+            }
+            else{
+              alert('No data available for the specified customer ID.');
+            }
+           
+        } catch (error) {
+            
+            console.error('Error:', error);
+            alert('Failed to fetch customer data. Please check your credentials.');
+        }
         } else {
-            // Handle empty input case if needed
             alert("Please enter a valid customer ID");
         }
     }
 
-    function displayCustomerDetails(customer) {
-        const customerDetailsElement = document.getElementById("customerDetails");
-        customerDetailsElement.innerHTML = `<p>ID: ${customer.id}</p>
-                                           <p>Name: ${customer.firstName}</p>
-                                           <p>Email: ${customer.email}</p>`;
+        function displayData(data) {
+        var tableHeaders = ['id', 'firstName', 'lastName', 'street', 'address', 'city', 'state', 'email', 'phone'];
+
+        console.log(data);
+        var tableHtml = '';
+        
+        if (data) {
+            tableHtml += '<tr>';
+            tableHeaders.forEach(header => {
+                tableHtml += `<td>${data[header]}</td>`;
+            });
+
+            tableHtml += `<td>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal" onclick="editData(${data.id})">Edit</button>
+                <button class="btn btn-danger btn-sm" onclick="deleteCustomer(${data.id})">Delete</button>
+            </td>`;
+            tableHtml += '</tr>';
+        } else {
+            tableHtml += '<tr><td colspan="10">No data available</td></tr>';
+        }
+
+        // Append the table row to the tbody
+        document.getElementById('dataContainer').innerHTML = tableHtml;
+
+        var tableContainer = document.getElementById('tableContainer');
+        tableContainer.style.display = data ? 'block' : 'none';
     }
+
+    function closePage() {
+        // Perform any cleanup or additional actions before closing the page
+        fetchData(); // Call the fetchData method
+        // Refresh the page
+        location.reload();
+    }
+
   </script>
 
 </body>
